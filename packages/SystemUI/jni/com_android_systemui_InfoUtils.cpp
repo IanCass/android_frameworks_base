@@ -10,56 +10,69 @@
 #include <sys/ioctl.h>
 #include <linux/ioctl.h>
 
-#define TEMP_NODE "/sys/devices/platform/tmu/temperature"
+#define GPUFREQ_NODE "/sys/class/mpgpu/cur_freq"
+#define TEMP_NODE "/sys/devices/virtual/thermal/thermal_zone0/temp"
 
-#define LOG_TAG "Info_JNI"
+#define LOG_TAG "Info-JNI"
 
 namespace android {
 
-#define CPU_FREQ_NOED "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
+static jstring native_GetGPUCurFreq(JNIEnv* env, jobject obj) {
+    FILE *fp = NULL;
+    char buf[4] = {'\0',};
+    fp = fopen(GPUFREQ_NODE, "r");
+
+    if (fp == NULL)
+        return NULL;
+    else
+        fread(buf, 1, 3, fp);
+
+    fclose(fp);
+
+    return env->NewStringUTF(buf);
+}
 
 static jstring native_GetCPUCurFreq(JNIEnv* env, jobject obj) {
-	FILE *fp = NULL;
-	char buf[8] = {'\0',};
+    FILE *fp = NULL;
+    char buf[8] = {'\0',};
 
-	fp = fopen(CPU_FREQ_NOED, "r");
+    fp = fopen("/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq", "r");
 
-	if (fp == NULL) {
-		ALOGE("Not opened CPU freq");
-		buf[0] = '0';
-		buf[1] = '\0';
-		memset(buf, '\0', 8);
-		return env->NewStringUTF(buf);
-	}
+    if (fp == NULL)
+        return NULL;
+    else
+        fread(buf, 1, 7, fp);
 
-	fread(buf, 1, 7, fp);
+    //ALOGE("buf[%d] = %s", i, buf[i]);
 
-	if (buf[6] == '\n')
-		buf[3] = '\0';
-	else
-		buf[4] = '\0';
+    if (buf[6] == '\n')
+        buf[3] = '\0';
+    else
+        buf[4] = '\0';
 
-	fclose(fp);
+    fclose(fp);
 
-	return env->NewStringUTF(buf);
+    return env->NewStringUTF(buf);
 }
 
 static jstring native_GetTemperature(JNIEnv* env, jobject obj) {
-	FILE *fp = NULL;
-	char buf[13] = {'\0',};
+    FILE *fp = NULL;
 
-	fp = fopen(TEMP_NODE, "r");
+    fp = fopen(TEMP_NODE, "r");
 
-	if (fp == NULL) {
-		ALOGE("Not opened temp");
-		return NULL;
-	}
+    if (fp == NULL) {
+        ALOGE("Not opened temp");
+        return NULL;
+    }
 
-	fread(buf, 1, 12, fp);
+    char buf[6] = {'\0',};
+    int read = -1;
 
-	fclose(fp);
+    read = fread(buf, 1, 5, fp);
 
-	return env->NewStringUTF(buf);
+    fclose(fp);
+
+    return env->NewStringUTF(buf);
 }
 
 int mOldUserCPU[4];
@@ -68,16 +81,16 @@ int mOldIdleCPU[4];
 
 static int calUsage(int cpu_idx, int user, int nice, int system, int idle) {
     long total = 0;
-	long usage = 0;
+    long usage = 0;
     int diff_user, diff_system, diff_idle;
 
     diff_user = mOldUserCPU[cpu_idx] - user;
     diff_system = mOldSystemCPU[cpu_idx] - system;
     diff_idle = mOldIdleCPU[cpu_idx] - idle;
 
-    total = diff_user + diff_system + diff_idle; 
-	if (total != 0)
-    	usage = diff_user * 100 / total;
+    total = diff_user + diff_system + diff_idle;
+    if (total != 0)
+        usage = diff_user * 100 / total;
 
     mOldUserCPU[cpu_idx] = user;
     mOldSystemCPU[cpu_idx] = system;
@@ -93,22 +106,22 @@ static void native_GetCPUUsage(JNIEnv* env, jobject obj, jintArray arr) {
     int user, system, nice, idle;
     FILE *fp;
     int cpu_index = 0;
-	
+
     fp = fopen("/proc/stat", "r");
     if (fp == NULL)
         return;
 
-	jint *usage = env->GetIntArrayElements(arr, NULL);
+    jint *usage = env->GetIntArrayElements(arr, NULL);
 
     int first = 0;
 
     while(fgets(buf, 80, fp)) {
         char temp[4] = "cpu";
-        temp[3] = '0' + cpu_index; 
+        temp[3] = '0' + cpu_index;
         if (!strncmp(buf, temp, 4)) {
             findCPU = 1;
             sscanf(buf, "%s %d %d %d %d",
-            cpuid, &user, &nice, &system, &idle); 
+            cpuid, &user, &nice, &system, &idle);
             usage[cpu_index] = calUsage(cpu_index, user, nice, system, idle);
             cpu_index++;
         }
@@ -122,14 +135,15 @@ static void native_GetCPUUsage(JNIEnv* env, jobject obj, jintArray arr) {
 
     fclose(fp);
 
-	env->ReleaseIntArrayElements(arr, usage, 0);
+    env->ReleaseIntArrayElements(arr, usage, 0);
 
-    return;    
+    return;
 }
 
 static const JNINativeMethod g_methods[] = {
+    { "native_GetGPUCurFreq", "()Ljava/lang/String;", (jstring*)native_GetGPUCurFreq },
     { "native_GetCPUCurFreq", "()Ljava/lang/String;", (jstring*)native_GetCPUCurFreq },
-    { "native_GetTemperature", "()Ljava/lang/String;", (jstring*)native_GetTemperature },
+    { "native_GetTemperature", "()Ljava/lang/String;", (jstring)native_GetTemperature },
     { "native_GetCPUUsage", "([I)V", (void*)native_GetCPUUsage },
 };
 
