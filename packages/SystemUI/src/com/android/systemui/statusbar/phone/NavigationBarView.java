@@ -283,7 +283,7 @@ public class NavigationBarView extends LinearLayout {
     }
 
     public View getPhoneButton() {
-        return mCurrentView.findViewById(R.id.vol_phone);
+        return mCurrentView.findViewById(R.id.phone);
     }
 
     public View getNaviButton() {

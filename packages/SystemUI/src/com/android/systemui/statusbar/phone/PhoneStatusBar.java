@@ -758,21 +758,21 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
     private View.OnClickListener mPhoneClickListener = new View.OnClickListener() {
     	public void onClick(View v) {
 		Intent i = new Intent("navbar.PHONE");
-		sendBroadcast(i);
+		mContext.sendBroadcast(i);
 	}
      };
 
      private View.OnClickListener mNaviClickListener = new View.OnClickListener() {
      public void onClick(View v) {
 		Intent i = new Intent("navbar.NAVI");
-		sendBroadcast(i);
+		mContext.sendBroadcast(i);
 	}
      };
 
      private View.OnClickListener mMusicClickListener = new View.OnClickListener() {
      public void onClick(View v) {
 		Intent i = new Intent("navbar.MUSIC");
-		sendBroadcast(i);
+		mContext.sendBroadcast(i);
 	}
      };
 
@@ -823,9 +823,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         mNavigationBarView.getSearchLight().setOnTouchListener(mHomeSearchActionListener);
 
         if (mNavigationBarView.getPhoneButton() != null) {
-            mNavigationBarView.getPhoneButton().setOnClickListener(mVolDownClickListener);
-            mNavigationBarView.getNaviButton().setOnClickListener(mVolUpClickListener);
-            mNavigationBarView.getMusicButton().setOnClickListener(mShutdownClickListener);
+            mNavigationBarView.getPhoneButton().setOnClickListener(mPhoneClickListener);
+            mNavigationBarView.getNaviButton().setOnClickListener(mNaviClickListener);
+            mNavigationBarView.getMusicButton().setOnClickListener(mMusicClickListener);
 
             int rotation = mDisplay.getRotation();
             if (mNavigationBarView.getWidth() == 1280
