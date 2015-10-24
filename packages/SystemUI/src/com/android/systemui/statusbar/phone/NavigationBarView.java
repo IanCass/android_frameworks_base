@@ -281,21 +281,17 @@ public class NavigationBarView extends LinearLayout {
         return mCurrentView.findViewById(R.id.home);
     }
 	
-	//codewalker
-	public View getVolDownButton() {
-        return mCurrentView.findViewById(R.id.vol_minus);
+	//IanCass
+    public View getNaviButton() {
+        return mCurrentView.findViewById(R.id.navi);
     }
 	
-	public View getVolUpButton() {
-        return mCurrentView.findViewById(R.id.vol_plus);
+    public View getPhoneButton() {
+        return mCurrentView.findViewById(R.id.phone);
     }
 
-	public View getShutdownButton() {
-        return mCurrentView.findViewById(R.id.shutdown);
-    }
-
-	public View getScreenshotButton() {
-        return mCurrentView.findViewById(R.id.screenshot);
+    public View getMusicButton() {
+        return mCurrentView.findViewById(R.id.music);
     }
 
     // for when home is disabled, but search isn't
@@ -544,8 +540,8 @@ public class NavigationBarView extends LinearLayout {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
-        mDelegateHelper.setInitialTouchRegion(getHomeButton(), getBackButton(), getRecentsButton(),
-				getVolDownButton(), getVolUpButton(), getShutdownButton(), getScreenshotButton());
+        mDelegateHelper.setInitialTouchRegion(getHomeButton(), getBackButton(), 
+				getMusicButton(), getPhoneButton(), getNaviButton() );
     }
 
     @Override
