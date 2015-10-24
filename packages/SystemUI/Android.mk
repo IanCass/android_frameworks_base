@@ -10,8 +10,6 @@ LOCAL_JAVA_LIBRARIES := telephony-common
 
 LOCAL_PACKAGE_NAME := SystemUI
 
-LOCAL_REQUIRED_MODULES := libpoweroff_jni
-
 LOCAL_CERTIFICATE := platform
 LOCAL_PRIVILEGED_MODULE := true
 
