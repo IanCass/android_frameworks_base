@@ -52,6 +52,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.inputmethodservice.InputMethodService;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -757,22 +758,28 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
 
     private View.OnClickListener mPhoneClickListener = new View.OnClickListener() {
     	public void onClick(View v) {
-		Intent i = new Intent("navbar.PHONE");
-		mContext.sendBroadcast(i);
+		launchApp(
+			System.getProperty("ro.navbar.phone.package", "com.apdroid.tabtalk"),
+			System.getProperty("ro.navbar.phone.class", "com.apdroid.tabtalk.DialActivity")
+		);
 	}
      };
 
      private View.OnClickListener mNaviClickListener = new View.OnClickListener() {
      public void onClick(View v) {
-		Intent i = new Intent("navbar.NAVI");
-		mContext.sendBroadcast(i);
+		launchApp(
+			System.getProperty("ro.navbar.navi.package", "com.google.android.apps.maps"),
+			System.getProperty("ro.navbar.navi.class", "com.google.android.maps.MapsActivity")
+		);
 	}
      };
 
      private View.OnClickListener mMusicClickListener = new View.OnClickListener() {
      public void onClick(View v) {
-		Intent i = new Intent("navbar.MUSIC");
-		mContext.sendBroadcast(i);
+		launchApp(
+			System.getProperty("ro.navbar.music.package", "com.maxmpz.audioplayer"),
+			System.getProperty("ro.navbar.music.class", "com.maxmpz.audioplayer.StartupActivity")
+		);
 	}
      };
 
@@ -2845,5 +2852,40 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         if (v instanceof DemoMode) {
             ((DemoMode)v).dispatchDemoCommand(command, args);
         }
+    }
+
+    public void launchApp(String pkg, String cls ) {
+
+        Intent intent = mContext.getPackageManager().getLaunchIntentForPackage(pkg);
+	if (intent == null)
+		goToAppstore(pkg);
+	
+	if (cls != null) {
+	    intent = new Intent(Intent.ACTION_MAIN);
+	    intent.setComponent(new ComponentName(pkg, cls));
+	}
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mContext.startActivityAsUser(intent, new UserHandle(UserHandle.USER_CURRENT));
+    }
+
+    public void goToAppstore(String pkg) {
+
+        try {
+
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setData(Uri.parse("market://details?id=" + pkg));
+            mContext.startActivityAsUser(intent, new UserHandle(UserHandle.USER_CURRENT));
+
+        } catch (android.content.ActivityNotFoundException anfe) {
+
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setData(Uri.parse("http://play.google.com/store/apps/details?id=" + pkg));
+            mContext.startActivityAsUser(intent, new UserHandle(UserHandle.USER_CURRENT));
+
+        }
+
     }
 }
