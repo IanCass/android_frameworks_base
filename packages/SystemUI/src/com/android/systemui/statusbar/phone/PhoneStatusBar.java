@@ -61,6 +61,7 @@ import android.os.Messenger;
 import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.SystemClock;
+import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.service.notification.StatusBarNotification;
@@ -759,8 +760,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
     private View.OnClickListener mPhoneClickListener = new View.OnClickListener() {
     	public void onClick(View v) {
 		launchApp(
-			System.getProperty("ro.navbar.phone.package", "com.apdroid.tabtalk"),
-			System.getProperty("ro.navbar.phone.class", "com.apdroid.tabtalk.DialActivity")
+			SystemProperties.get("ro.navbar.phone.package", "com.apdroid.tabtalk"),
+			SystemProperties.get("ro.navbar.phone.class", "com.apdroid.tabtalk.DialActivity")
 		);
 	}
      };
@@ -768,8 +769,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
      private View.OnClickListener mNaviClickListener = new View.OnClickListener() {
      public void onClick(View v) {
 		launchApp(
-			System.getProperty("ro.navbar.navi.package", "com.google.android.apps.maps"),
-			System.getProperty("ro.navbar.navi.class", "com.google.android.maps.MapsActivity")
+			SystemProperties.get("ro.navbar.navi.package", "com.google.android.apps.maps"),
+			SystemProperties.get("ro.navbar.navi.class", "com.google.android.maps.MapsActivity")
 		);
 	}
      };
@@ -777,8 +778,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
      private View.OnClickListener mMusicClickListener = new View.OnClickListener() {
      public void onClick(View v) {
 		launchApp(
-			System.getProperty("ro.navbar.music.package", "com.maxmpz.audioplayer"),
-			System.getProperty("ro.navbar.music.class", "com.maxmpz.audioplayer.StartupActivity")
+			SystemProperties.get("ro.navbar.music.package", "com.maxmpz.audioplayer"),
+			SystemProperties.get("ro.navbar.music.class", "com.maxmpz.audioplayer.StartupActivity")
 		);
 	}
      };
