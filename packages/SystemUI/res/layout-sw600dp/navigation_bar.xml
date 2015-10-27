@@ -65,7 +65,7 @@
                 />
 
             <com.android.systemui.statusbar.policy.KeyButtonView android:id="@+id/phone"
-                android:layout_width="80dp" android:paddingLeft="30dp" android:paddingRight="30dp"
+                android:layout_width="128dp" android:paddingLeft="30dp" android:paddingRight="30dp"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_sysbar_phone"
                 android:layout_weight="0"
@@ -74,7 +74,7 @@
                 />
 
             <com.android.systemui.statusbar.policy.KeyButtonView android:id="@+id/navi"
-                android:layout_width="80dp" android:paddingLeft="30dp" android:paddingRight="30dp"
+                android:layout_width="128dp" android:paddingLeft="30dp" android:paddingRight="30dp"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_sysbar_navi"
                 android:layout_weight="0"
@@ -83,7 +83,7 @@
                 />
 
             <com.android.systemui.statusbar.policy.KeyButtonView android:id="@+id/music"
-                android:layout_width="80dp" android:paddingLeft="30dp" android:paddingRight="30dp"
+                android:layout_width="128dp" android:paddingLeft="30dp" android:paddingRight="30dp"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_sysbar_music"
                 android:layout_weight="0"
@@ -228,7 +228,7 @@
                 />
 
             <com.android.systemui.statusbar.policy.KeyButtonView android:id="@+id/phone"
-                android:layout_width="80dp" android:paddingLeft="42dp" android:paddingRight="42dp"
+                android:layout_width="128dp" android:paddingLeft="42dp" android:paddingRight="42dp"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_sysbar_phone"
                 android:layout_weight="0"
@@ -236,7 +236,7 @@
                 android:contentDescription="@string/accessibility_recent"
                 />
             <com.android.systemui.statusbar.policy.KeyButtonView android:id="@+id/navi"
-                android:layout_width="80dp" android:paddingLeft="42dp" android:paddingRight="42dp"
+                android:layout_width="128dp" android:paddingLeft="42dp" android:paddingRight="42dp"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_sysbar_navi"
                 android:layout_weight="0"
@@ -245,7 +245,7 @@
                 />
 
             <com.android.systemui.statusbar.policy.KeyButtonView android:id="@+id/music"
-                android:layout_width="80dp" android:paddingLeft="42dp" android:paddingRight="42dp"
+                android:layout_width="128dp" android:paddingLeft="42dp" android:paddingRight="42dp"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_sysbar_music"
                 android:layout_weight="0"
